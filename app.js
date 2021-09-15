@@ -1,9 +1,9 @@
 //nhap cac thu vien vao tep
-var createError = require("http-errors");//loi http
+var createError = require("http-errors"); //loi http
 var express = require("express");
-var path = require("path");//ptich cu phap duong dan tm
-var cookieParser = require("cookie-parser");//chuyen doi cookie
-var logger = require("morgan");//ghi log
+var path = require("path"); //ptich cu phap duong dan tm
+var cookieParser = require("cookie-parser"); //chuyen doi cookie
+var logger = require("morgan"); //ghi log
 
 //require() modul tu tm cac route chua ma xl tap hop cu the cua tuyen duong(duong dan url) co lien quan
 var indexRouter = require("./routes/index");
@@ -12,9 +12,21 @@ var usersRouter = require("./routes/users");
 //tao dt ung dung nhanh
 var app = express();
 
+//ket noi voi csdl mongoDB-------------------
+//Nhập modul mongoose
+var mongoose = require("mongoose");
+// Thiết lập kết nối mongoose mặc định
+var mongoDB = "url_database"; //de tao tai khoan r nhet vao sau
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+//Nhận kết nối mặc định
+var db = mongoose.connection;
+// Ràng buộc kết nối với sự kiện lỗi (để nhận thông báo về lỗi kết nối)
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+
+
 //thiet lap view engine(template-mau)
-app.set("views", path.join(__dirname, "views"));//chi dinh thu muc noi chua cac mau-template
-app.set("view engine", "pug");//thiet lap view engine truong hop nay la pug
+app.set("views", path.join(__dirname, "views")); //chi dinh thu muc noi chua cac mau-template
+app.set("view engine", "pug"); //thiet lap view engine truong hop nay la pug
 
 // sd app.use() de them cac tvien pmem trung gian vao chuoi xl yeu cau
 //ngoai ra sd pmtg express.static sd express phuc vu tat ca tep tinh trong tmuc /public
