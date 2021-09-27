@@ -16,7 +16,7 @@ var app = express();
 //Nhập modul mongoose
 var mongoose = require("mongoose");
 // Thiết lập kết nối mongoose mặc định
-//url database cloud mongoDbAtlas azure tao bua de hoc
+//url database cloud mongoDbAtlas azure tao bua de hoc :v
 var mongoDB =
   "mongodb+srv://huyprowow:s3VQH2vSmsvfx7T@cluster0.kbemw.mongodb.net/local_library?retryWrites=true&w=majority";
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
