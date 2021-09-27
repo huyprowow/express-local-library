@@ -12,17 +12,18 @@ var usersRouter = require("./routes/users");
 //tao dt ung dung nhanh
 var app = express();
 
-//ket noi voi csdl mongoDB-------------------
+//------------ ket noi voi csdl mongoDB -------------------
 //Nhập modul mongoose
 var mongoose = require("mongoose");
 // Thiết lập kết nối mongoose mặc định
-var mongoDB = "url_database"; //de tao tai khoan r nhet vao sau
+//url database cloud mongoDbAtlas azure tao bua de hoc
+var mongoDB =
+  "mongodb+srv://huyprowow:s3VQH2vSmsvfx7T@cluster0.kbemw.mongodb.net/local_library?retryWrites=true&w=majority";
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 //Nhận kết nối mặc định
 var db = mongoose.connection;
 // Ràng buộc kết nối với sự kiện lỗi (để nhận thông báo về lỗi kết nối)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
-
 
 //thiet lap view engine(template-mau)
 app.set("views", path.join(__dirname, "views")); //chi dinh thu muc noi chua cac mau-template
