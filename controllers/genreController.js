@@ -8,7 +8,7 @@ exports.genre_list = function (req, res) {
 
 //ht trang chi tiet cho 1 the loai cu the
 exports.genre_detail = function (req, res) {
-  res.send("NOT IMPLEMENT : Genre detail" + req.params.id);
+  res.send("NOT IMPLEMENT : Genre detail " + req.params.id);
 };
 
 //ht tao bieu mau the loai tren GET

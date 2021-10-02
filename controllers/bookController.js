@@ -13,7 +13,7 @@ exports.book_list = function (req, res) {
 
 //ht trang chi tiet cho 1 sach cu the
 exports.book_detail = function (req, res) {
-  res.send("NOT IMPLEMENT : Book detail" + req.params.id);
+  res.send("NOT IMPLEMENT : Book detail " + req.params.id);
 };
 
 //ht tao bieu mau sach tren GET

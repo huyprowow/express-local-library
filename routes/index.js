@@ -6,7 +6,7 @@ var router = express.Router();
 //chuyen bien title cho mau .pug hien thi
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.redirect('/catalog');// redirect() chuyen trang den duong dan dc chi dinh ( /catalog )
 });
 
 module.exports = router;

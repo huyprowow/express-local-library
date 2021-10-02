@@ -8,6 +8,7 @@ var logger = require("morgan"); //ghi log
 //require() modul tu tm cac route chua ma xl tap hop cu the cua tuyen duong(duong dan url) co lien quan
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var catalogRouter = require("./routes/catalog");//nhap ca tuyen duowng cho khu vuc catalog (danh muc) cua trang web
 
 //tao dt ung dung nhanh
 var app = express();
@@ -42,6 +43,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //vd modul users dc nhap cd 1 tuyen '/profile' => truy cap tai '/users/profile'
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use('/catalog', catalogRouter);//them tuyen catalog vao chuoi phan mem trung gian
 
 //xd pt xl loi va ph http 404
 // catch 404 and forward to error handler

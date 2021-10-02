@@ -8,7 +8,7 @@ exports.bookinstance_list = function (req, res) {
 
 //ht trang chi tiet cho 1 phien ban sach cu the
 exports.bookinstance_detail = function (req, res) {
-  res.send("NOT IMPLEMENT : BookInstance detail" + req.params.id);
+  res.send("NOT IMPLEMENT : BookInstance detail " + req.params.id);
 };
 
 //ht phien ban sach tao bieu mau tren GET

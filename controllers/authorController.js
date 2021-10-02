@@ -8,7 +8,7 @@ exports.author_list = function (req, res) {
 
 //ht trang chi tiet cho 1 tac gia cu the
 exports.author_detail = function (req, res) {
-  res.send("NOT IMPLEMENT : Author detail" + req.params.id);
+  res.send("NOT IMPLEMENT : Author detail " + req.params.id);
 };
 
 //ht tao bieu mau tac gia tren GET
