@@ -1,0 +1,101 @@
+/////////////////  TEMPLATE EXAMPLE  /////////////////////////////
+doctype html
+html(lang="en")
+  head
+    title= title
+    script(type='text/javascript').
+  body
+    h1= title
+
+    p This is a line with #[em some emphasis] and #[strong strong text] markup.
+    p This line has un-escaped data: !{'<em> is emphasised</em>'} and escaped data: #{'<em> is not emphasised</em>'}.
+      | This line follows on.
+    p= 'Evaluated and <em>escaped expression</em>:' + title
+
+    <!-- You can add HTML comments directly -->
+    // You can add single line JavaScript comments and they are generated to HTML comments
+    //- Introducing a single line JavaScript comment with "//-" ensures the comment isn't rendered to HTML
+
+    p A line with a link
+      a(href='/catalog/authors') Some link text
+      |  and some extra text.
+
+    #container.col
+      if title
+        p A variable named "title" exists.
+      else
+        p A variable named "title" does not exist.
+      p.
+        Pug is a terse and simple template language with a
+        strong focus on performance and powerful features.
+
+    h2 Generate a list
+
+    ul
+      each val in [1, 2, 3, 4, 5]
+        li= val
+//////////////////////  GIAI THICH  //////////////////////////
+
+//
+  Các thuộc tính phần tử được xác định trong dấu ngoặc đơn sau phần tử liên kết của chúng. 
+  Bên trong dấu ngoặc đơn, các thuộc tính được xác định trong danh sách 
+  được phân tách bằng dấu phẩy hoặc khoảng trắng của các cặp tên thuộc tính và giá trị thuộc tính, ví dụ:
+
+script(type='text/javascript'), link(rel='stylesheet', href='/stylesheets/style.css')
+meta(name='viewport' content='width=device-width initial-scale=1')
+
+//
+  Các giá trị của tất cả các thuộc tính được thoát ra(escaped chuỗi thoát) (ví dụ: các ký tự như " >" được chuyển đổi thành các mã HTML tương đương như " &gt;")
+  để ngăn chặn các cuộc tấn công chèn JavaScript hoặc viết mã chéo trang web.(JavaScript injection or cross-site scripting)
+
+//
+  Nếu một thẻ được theo sau bởi dấu bằng, văn bản sau được coi là một biểu thức JavaScript . 
+  Vì vậy, ví dụ: trong dòng đầu tiên bên dưới, nội dung của h1thẻ sẽ có thể thay đổi title (được xác định trong tệp hoặc được chuyển vào mẫu từ Express).
+  Ở dòng thứ hai, nội dung đoạn văn là một chuỗi văn bản được nối với biến title. Trong cả hai trường hợp, hành vi mặc định là thoát khỏi dòng.
+
+h1= title
+p= 'Evaluated and <em>escaped expression</em>:' + title
+
+//
+  Nếu không có ký hiệu bằng sau thẻ thì nội dung được coi là văn bản thuần túy.
+  Trong văn bản thuần túy, bạn có thể chèn dữ liệu thoát và không thoát ( nội suy chuỗi hoặc thoát các kí tự <,>,...(đổi thành &lt,&gt...)) bằng cách sử dụng cú pháp #{}và !{}cú pháp tương ứng, như được hiển thị bên dưới.
+  Bạn cũng có thể thêm HTML thô bên trong văn bản thuần túy.
+
+p This is a line with #[em some emphasis] and #[strong strong text] markup.
+p This line has an un-escaped string: !{'<em> is emphasised</em>'}, an escaped string: #{'<em> is not emphasised</em>'}, and escaped variables: #{title}.
+
+//
+  Lưu ý: Bạn hầu như luôn muốn thoát dữ liệu từ người dùng (thông qua #{} cú pháp).
+  Dữ liệu có thể được tin cậy (ví dụ như số lượng bản ghi đã tạo, v.v.) có thể được hiển thị mà không thoát các giá trị.
+
+//
+  Bạn có thể sử dụng ký tự dấu gạch ngang (' | ') ở đầu dòng để biểu thị "văn bản thô".
+  Ví dụ: văn bản bổ sung được hiển thị bên dưới sẽ được hiển thị trên cùng một dòng với ký tự liên kết trước đó, nhưng sẽ không được liên kết.
+
+a(href='http://someurl/') Link text
+| Plain text
+
+//
+  Pug cho phép bạn thực hiện các thao có điều kiện sử dụng if, else, else if và unless -ví dụ:
+
+if title
+  p A variable named "title" exists
+else
+  p A variable named "title" does not exist
+
+//
+  Bạn cũng có thể thực hiện các thao tác vòng lặp / lặp lại (loop/iteration) bằng cách sử dụng each-in hoặc cú pháp while. 
+  Trong đoạn mã bên dưới, chúng tôi đã lặp qua một mảng để hiển thị danh sách các biến (lưu ý việc sử dụng 'li =' để đánh giá "val" như một biến bên dưới. 
+  Giá trị bạn lặp lại cũng có thể được chuyển vào mẫu như một biến!
+
+ul
+  each val in [1, 2, 3, 4, 5]
+    li= val
+
+//
+  Cú pháp này cũng hỗ trợ các chú thích (có thể được hiển thị trong đầu ra — hoặc không — như bạn chọn),
+  mixin để tạo các khối mã có thể sử dụng lại, các câu lệnh trường hợp và nhiều tính năng khác. 
+//- 
+  comment bang // se dc tao thanh comment html
+  comment bang //- dong comment se k render ra html
+  dung dua tren ve xuong dong lui vao 2 dau cach de comment khoi(nhieu dong)
