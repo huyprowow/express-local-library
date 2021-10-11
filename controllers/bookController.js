@@ -1,8 +1,43 @@
 var Book = require("../models/book");
+var Author = require("../models/author");
+var Genre = require("../models/genre");
+var BookInstance = require("../models/bookinstance");
+
+var async = require("async");
 
 //hien thi trang chao mung (trang chu - home page) cua trang web
 exports.index = function (req, res) {
-  res.send("NOT IMPLEMENT : Site Home Page");
+  // res.send("NOT IMPLEMENT : Site Home Page");
+  async.parallel(
+    {
+      //sd async parallel kieu dt=> result nhan dc dang dt, dang key:value truy cap trong template =key
+      book_count: function (callback) {
+        Book.countDocuments({}, callback); //Chuyển một đối tượng trống làm điều kiện khớp để tìm tất cả các tài liệu của collection này
+      },
+      book_instance_count: function (callback) {
+        Book.countDocuments({}, callback);
+      },
+      book_instance_available_count: function (callback) {
+        Book.countDocuments({ status: "Available" }, callback); //dk trang thai available
+      },
+      author_count: function (callback) {
+        Author.countDocuments({}, callback);
+      },
+      genre_count: function (callback) {
+        Genre.countDocuments({}, callback);
+      },
+    },
+    function (err, results) {
+      //luu y chua co xl loi thông thường
+      //có thể sử dụng một đường dẫn thực thi riêng để xử lý việc hiển thị lỗi
+
+      res.render("index", {
+        title: "Local Library Home",
+        error: err,
+        data: results,
+      });
+    }
+  );
 };
 
 //ht danh sach tat ca cac sach

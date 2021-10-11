@@ -1,6 +1,23 @@
 extends layout
 
-
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em LocalLibrary], a very basic Express website developed as a tutorial example on the Mozilla Developer Network.
+
+  h1 Dynamic content
+
+  if error
+    p Error getting dynamic content
+  else
+    p The library has the following record counts:
+
+    ul
+      li #[strong Books:] !{data.book_count}
+      li #[strong Copies:] !{data.book_instance_count}
+      li #[strong Copies available:] !{data.book_instance_available_count}
+      li #[strong Authors:] !{data.author_count}
+      li #[strong Genres:] !{data.genre_count}
+//-
+  Chúng ta đã không thoát(escaped) khỏi các giá trị đếm (tức là chúng ta đã sử dụng cú pháp !{} thay cho #{})
+  vì các giá trị đếm được tính toán. Nếu thông tin được cung cấp bởi người dùng cuối 
+  thì chúng tôi sẽ loại bỏ(escaped) biến để hiển thị(su dung #{})
