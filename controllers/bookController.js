@@ -41,9 +41,18 @@ exports.index = function (req, res) {
 };
 
 //ht danh sach tat ca cac sach
-exports.book_list = function (req, res) {
-  //xu li xong req =>k co ham next
-  res.send("NOT IMPLEMENT : Book list");
+exports.book_list = function (req, res, next) {
+  //neu xu li xong req =>k co ham next
+  // res.send("NOT IMPLEMENT : Book list");
+
+  Book.find({}, "title author")
+    .sort({title:1})//sx ascending
+    .populate("author")
+    .exec(function (err, list_books) {
+      if (err) return next(err);
+      //thanh cong =>render ra view
+      res.render("book_list", { title: "Book List", book_list: list_books });
+    });
 };
 
 //ht trang chi tiet cho 1 sach cu the
