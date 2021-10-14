@@ -45,6 +45,13 @@ script(type='text/javascript'), link(rel='stylesheet', href='/stylesheets/style.
 meta(name='viewport' content='width=device-width initial-scale=1')
 
 //
+  chúng ta có thể sử dụng ký hiệu dấu chấm sau thẻ để chỉ định một lớp
+  span.text-success sẽ được biên dịch thành <span class="text-success">
+  (và cũng có thể được viết bằng Pug dưới dạng span(class="text-success")
+
+span.text-success
+
+//
   Các giá trị của tất cả các thuộc tính được thoát ra(escaped chuỗi thoát) (ví dụ: các ký tự như " >" được chuyển đổi thành các mã HTML tương đương như " &gt;")
   để ngăn chặn các cuộc tấn công chèn JavaScript hoặc viết mã chéo trang web.(JavaScript injection or cross-site scripting)
 

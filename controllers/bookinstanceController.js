@@ -1,9 +1,23 @@
+const book = require("../models/book");
 var BookInstance = require("../models/bookinstance");
 
 //ht danh sach tat ca cac phien ban sach
-exports.bookinstance_list = function (req, res) {
+exports.bookinstance_list = function (req, res, next) {
   //xu li xong req =>k co ham next
-  res.send("NOT IMPLEMENT : BookInstance list");
+  // res.send("NOT IMPLEMENT : BookInstance list");
+
+  BookInstance.find()
+    .populate("book")
+    .exec(function (err, list_bookinstances) {
+      if (err) {
+        return next(err);
+      }
+      //thanh cong =>render
+      res.render("bookinstance_list", {
+        title: "Book Instance",
+        bookinstance_list: list_bookinstances,
+      });
+    });
 };
 
 //ht trang chi tiet cho 1 phien ban sach cu the

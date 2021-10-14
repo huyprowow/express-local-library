@@ -46,7 +46,7 @@ exports.book_list = function (req, res, next) {
   // res.send("NOT IMPLEMENT : Book list");
 
   Book.find({}, "title author")
-    .sort({title:1})//sx ascending
+    .sort({ title: 1 }) //sx ascending
     .populate("author")
     .exec(function (err, list_books) {
       if (err) return next(err);
