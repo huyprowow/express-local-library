@@ -3,7 +3,13 @@ var Genre = require("../models/genre");
 //ht danh sach tat ca cac the loai
 exports.genre_list = function (req, res) {
   //xu li xong req =>k co ham next
-  res.send("NOT IMPLEMENT : Genre list");
+  // res.send("NOT IMPLEMENT : Genre list");
+  Genre.find()
+  .sort([['name',1]])
+  .exec(function (err,list_category){
+    if (err) return next(err);
+    res.render('category_list',{title:"Genre List",category_list:list_category});
+  })
 };
 
 //ht trang chi tiet cho 1 the loai cu the

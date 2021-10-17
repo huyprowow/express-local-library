@@ -3,7 +3,13 @@ var Author = require("../models/author");
 //ht danh sach tat ca cac tac gia
 exports.author_list = function (req, res) {
   //xu li xong req =>k co ham next
-  res.send("NOT IMPLEMENT : Author list");
+  // res.send("NOT IMPLEMENT : Author list");
+  Author.find()
+  .sort([['family_name','ascending']])
+  .exec(function (err,list_author){
+    if (err) {return next(err);}
+    res.render('author_list',{title:'Author List',author_list:list_author})
+  })
 };
 
 //ht trang chi tiet cho 1 tac gia cu the

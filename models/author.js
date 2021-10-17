@@ -1,3 +1,5 @@
+const {DateTime}=require('luxon');
+
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var AuthorSchema = new Schema({
@@ -26,6 +28,7 @@ AuthorSchema.virtual("lifespan").get(function () {
       DateTime.DATE_MED
     );
   }
+  return lifetime_string;
 });
 
 //Virtual cho url tac gia
