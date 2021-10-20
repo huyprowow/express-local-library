@@ -56,8 +56,35 @@ exports.book_list = function (req, res, next) {
 };
 
 //ht trang chi tiet cho 1 sach cu the
-exports.book_detail = function (req, res) {
-  res.send("NOT IMPLEMENT : Book detail " + req.params.id);
+exports.book_detail = function (req, res, next) {
+  // res.send("NOT IMPLEMENT : Book detail " + req.params.id);
+
+  async.parallel(
+    {
+      book: function (callback) {
+        Book.findById(req.params.id)
+          .populate("author")
+          .populate("genre")
+          .exec(callback);
+      },
+      book_instance: function (callback) {
+        BookInstance.find({ book: req.params.id }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) return next(err);
+      if (results.book === null) {
+        var err = new Error("Book not found");
+        err.status = 404;
+        return next(err);
+      }
+      res.render("book_detail", {
+        title: results.book.title,
+        book: results.book,
+        book_instances: results.book_instance,
+      });
+    }
+  );
 };
 
 //ht tao bieu mau sach tren GET
