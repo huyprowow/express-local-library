@@ -17,7 +17,7 @@ block content
     h4 Copies
 
     each val in book_instances 
-      hr
+      hr 
       if val.status==='Available'
         p.text-success #{val.status}
       else if val.status==='Maintenance'
@@ -30,5 +30,5 @@ block content
       p #[strong Id:]
         a(href=val.url) #{val._id}
 
-    else
+    else 
       p There are no book copies in this library.

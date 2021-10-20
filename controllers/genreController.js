@@ -15,7 +15,7 @@ exports.genre_list = function (req, res) {
         title: "Genre List",
         category_list: list_category,
       });
-    });
+    }); 
 };
 
 //ht trang chi tiet cho 1 the loai cu the
