@@ -21,8 +21,23 @@ exports.bookinstance_list = function (req, res, next) {
 };
 
 //ht trang chi tiet cho 1 phien ban sach cu the
-exports.bookinstance_detail = function (req, res) {
-  res.send("NOT IMPLEMENT : BookInstance detail " + req.params.id);
+exports.bookinstance_detail = function (req, res, next) {
+  // res.send("NOT IMPLEMENT : BookInstance detail " + req.params.id);
+
+  BookInstance.findById(req.params.id)
+    .populate("book")
+    .exec(function (err, bookinstance) {
+      if (err) return next(err);
+      if (bookinstance == null) {
+        var err = new Error("BookInstance not found");
+        err.status = 404;
+        return next(err);
+      }
+      res.render("bookinstance_detail", {
+        title: "Copy: " + bookinstance.book.title,
+        bookinstance: bookinstance,
+      });
+    });
 };
 
 //ht phien ban sach tao bieu mau tren GET
