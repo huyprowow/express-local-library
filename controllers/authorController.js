@@ -1,7 +1,7 @@
 var Author = require("../models/author");
 var async = require("async");
 var Book = require("../models/book");
-
+var { body, validationResult } = require("express-validator");
 //ht danh sach tat ca cac tac gia
 exports.author_list = function (req, res) {
   //xu li xong req =>k co ham next
@@ -49,14 +49,60 @@ exports.author_detail = function (req, res) {
 };
 
 //ht tao bieu mau tac gia tren GET
-exports.author_create_get = function (req, res) {
-  res.send("NOT IMPLEMENT : Author create GET");
+exports.author_create_get = function (req, res, next) {
+  // res.send("NOT IMPLEMENT : Author create GET");
+  res.render("author_form", { title: "Create Author" });
 };
 
 //xu li tao tac gia tren post
-exports.author_create_post = function (req, res) {
-  res.send("NOT IMPLEMENT : Author create POST");
-};
+exports.author_create_post = [
+  body("first_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("First name must be specified")
+    .isAlphanumeric()
+    .withMessage("First name has non-alphanumeric characters"),
+  body("family_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Family name must be specified")
+    .isAlphanumeric()
+    .withMessage("Last name has non-alphanumeric characters"),
+  body("date_of_birth", "Invalid date of birth")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+  body("date_of_death", "Invalid date of death")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+
+  function (req, res, next) {
+    // res.send("NOT IMPLEMENT : Author create POST");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render("author_form", {
+        title: "Create Author",
+        author: req.body,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      var author = new Author({
+        first_name: req.body.first_name,
+        family_name: req.body.family_name,
+        date_of_birth: req.body.date_of_birth,
+        date_of_death: req.body.date_of_death,
+      });
+      author.save(function (err) {
+        if (err) return next(err);
+        res.redirect(author.url);
+      });
+    }
+  },
+];
 
 //ht xoa bieu mau tac gia tren get
 exports.author_delete_get = function (req, res) {
