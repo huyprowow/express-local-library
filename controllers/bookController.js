@@ -5,6 +5,8 @@ var Genre = require("../models/genre");
 var BookInstance = require("../models/bookinstance");
 
 var async = require("async");
+const { body,validationResult } = require("express-validator");
+const book = require("../models/book");
 
 //hien thi trang chao mung (trang chu - home page) cua trang web
 exports.index = function (req, res) {
@@ -89,14 +91,107 @@ exports.book_detail = function (req, res, next) {
 };
 
 //ht tao bieu mau sach tren GET
-exports.book_create_get = function (req, res) {
-  res.send("NOT IMPLEMENT : Book create GET");
+exports.book_create_get = function (req, res, next) {
+  // res.send("NOT IMPLEMENT : Book create GET");
+  //get tất cả các tác giả và thể loại mà có thể sử dụng để thêm vào sách của mình.
+  async.parallel(
+    {
+      authors: function (callback) {
+        Author.find(callback);
+      },
+      genres: function (callback) {
+        Genre.find(callback);
+      },
+    },
+    function (err, results) {
+      if (err) return next(err);
+      res.render("book_form", {
+        title: "Create Book",
+        authors: results.authors,
+        genres: results.genres,
+      });
+    }
+  );
 };
 
 //xu li tao sach tren post
-exports.book_create_post = function (req, res) {
-  res.send("NOT IMPLEMENT : Book create POST");
-};
+exports.book_create_post = [
+  //convert thể loại sang mảng
+  (req, res, next) => {
+    if (!(req.body.genre instanceof Array)) {
+      if (typeof req.body.genre === "undefined") {
+        req.body.genre = [];
+      } else {
+        req.body.genre = new Array(req.body.genre);
+      }
+    }
+    next();
+  },
+  //validate,sanitize cac truong
+  body("title", "Title must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("author", "Author must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("summary", "Summary must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("genre.*").escape(),
+  //xl yeu cau sau khi validate,sanitize
+  (req, res, next) => {
+    // res.send("NOT IMPLEMENT : Book create POST");
+    const errors = validationResult(req);
+    var book = new Book({
+      title: req.body.title,
+      author: req.body.author,
+      summary: req.body.summary,
+      isbn: req.body.isbn,
+      genre: req.body.genre,
+    });
+    if (!errors.isEmpty()) {
+      //Có lỗi. Hiển thị lại biểu mẫu với các giá trị / thông báo lỗi đã được làm sạch
+      //get tất cả các tác giả và thể loại cho form
+      async.parallel(
+        {
+          authors: function (callback) {
+            Author.find(callback);
+          },
+          genres: function (callback) {
+            Genre.find(callback);
+          },
+        },
+        function (err, results) {
+          if (err) return next(err);
+
+          //Đánh dấu các thể loại đã chọn của chúng tôi là đã chọn(checked)
+          for (let i = 0; i < results.genres.length; i++) {
+            if (book.genre.indexOf(results.genres[i]._id) > -1) {
+              results.genre[i].checked = "true";
+            }
+          }
+
+          res.render("book_form", {
+            title: "Create Book",
+            authors: results.authors,
+            genres: results.genres,
+            book: book,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    } else {
+      book.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(book.url);
+      });
+    }
+  },
+];
 
 //ht xoa bieu mau sach tren get
 exports.book_delete_get = function (req, res) {
