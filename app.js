@@ -20,7 +20,7 @@ var app = express();
 var mongoose = require("mongoose");
 // Thiết lập kết nối mongoose mặc định
 //url database cloud mongoDbAtlas azure tao bua de hoc :v
-var mongoDB = process.env.MONGODB_URL.toString(); //chuyen bien mt thanh chuoi
+var mongoDB =  process.env.MONGODB_URL.toString(); //chuyen bien mt thanh chuoi
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 //Nhận kết nối mặc định
 var db = mongoose.connection;
