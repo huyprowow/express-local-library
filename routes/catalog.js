@@ -22,7 +22,7 @@ router.post('/book/create',book_controller.book_create_post);
 router.get('/book/:id/delete',book_controller.book_delete_get);
 
 //dang(POST) yeu cau xoa sach(Book)
-router.post('/book/:id/delete',book_controller.book_create_post);
+router.post('/book/:id/delete',book_controller.book_delete_post);
 
 //nhan(GET) yeu cau cap nhap sach(Book)
 router.get('/book/:id/update',book_controller.book_update_get);
@@ -48,7 +48,7 @@ router.post('/author/create',author_controller.author_create_post);
 router.get('/author/:id/delete',author_controller.author_delete_get);
 
 //dang(POST) yeu cau xoa tac gia (Author)
-router.post('/author/:id/delete',author_controller.author_create_post);
+router.post('/author/:id/delete',author_controller.author_delete_post);
 
 //nhan(GET) yeu cau cap nhap tac gia (Author)
 router.get('/author/:id/update',author_controller.author_update_get);
@@ -74,7 +74,7 @@ router.post('/genre/create',genre_controller.genre_create_post);
 router.get('/genre/:id/delete',genre_controller.genre_delete_get);
 
 //dang(POST) yeu cau xoa the loai (Genre)
-router.post('/genre/:id/delete',genre_controller.genre_create_post);
+router.post('/genre/:id/delete',genre_controller.genre_delete_post);
 
 //nhan(GET) yeu cau cap nhap the loai (Genre)
 router.get('/genre/:id/update',genre_controller.genre_update_get);
@@ -100,7 +100,7 @@ router.post('/bookinstance/create',book_instance_controller.bookinstance_create_
 router.get('/bookinstance/:id/delete',book_instance_controller.bookinstance_delete_get);
 
 //dang(POST) yeu cau xoa phien ban sach(BookInstance)
-router.post('/bookinstance/:id/delete',book_instance_controller.bookinstance_create_post);
+router.post('/bookinstance/:id/delete',book_instance_controller.bookinstance_delete_post);
 
 //nhan(GET) yeu cau cap nhap phien ban sach(BookInstance)
 router.get('/bookinstance/:id/update',book_instance_controller.bookinstance_update_get);

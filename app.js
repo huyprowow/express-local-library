@@ -1,3 +1,5 @@
+require("dotenv").config({ path: ".env" }); //config bien moi truowng
+
 //nhap cac thu vien vao tep
 var createError = require("http-errors"); //loi http
 var express = require("express");
@@ -18,8 +20,7 @@ var app = express();
 var mongoose = require("mongoose");
 // Thiết lập kết nối mongoose mặc định
 //url database cloud mongoDbAtlas azure tao bua de hoc :v
-var mongoDB =
-  "mongodb+srv://huyprowow:s3VQH2vSmsvfx7T@cluster0.kbemw.mongodb.net/local_library?retryWrites=true&w=majority";
+var mongoDB = process.env.MONGODB_URL.toString(); //chuyen bien mt thanh chuoi
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 //Nhận kết nối mặc định
 var db = mongoose.connection;
