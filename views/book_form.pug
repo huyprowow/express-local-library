@@ -14,7 +14,14 @@ block content
         for author in authors 
           if book 
             //id tác giả sách mới và id tác giả sách hiện có sẽ thuộc loại Schema.Types.ObjectId. Vì vậy, để so sánh chúng, chúng ta phải chuyển đổi chúng thành chuỗi trước.
-            option(value=author._id selected=(author._id.toString()===book.author._id.toString()?'selected':false)) #{author.name}
+            //-Xử lý biểu mẫu GET, trong đó book.author là một đối tượng và biểu mẫu POST, trong đó nó là một chuỗi.
+            option(
+              value=author._id
+              selected=(
+                author._id.toString()===book.author._id
+                ||author._id.toString()===book.author
+              )?'selected':false
+            ) #{author.name}
           else 
             option(value=author._id) #{author.name}
     div.form-group

@@ -22,6 +22,7 @@ var mongoose = require("mongoose");
 //url database cloud mongoDbAtlas azure tao bua de hoc :v
 var mongoDB =  process.env.MONGODB_URL.toString(); //chuyen bien mt thanh chuoi
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.Promise= global.Promise;
 //Nhận kết nối mặc định
 var db = mongoose.connection;
 // Ràng buộc kết nối với sự kiện lỗi (để nhận thông báo về lỗi kết nối)
