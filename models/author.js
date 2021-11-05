@@ -35,6 +35,13 @@ AuthorSchema.virtual("lifespan").get(function () {
 AuthorSchema.virtual("url").get(function (){
     return '/catalog/author/'+this._id;
 });
+AuthorSchema.virtual("format_date_of_birth_form").get(function (){
 
+  return this.date_of_birth.toISOString().split('T')[0];
+})
+AuthorSchema.virtual("format_date_of_death_form").get(function (){
+
+  return this.date_of_death.toISOString().split('T')[0];
+})
 //xuat model
 module.exports =mongoose.model('Author',AuthorSchema); 

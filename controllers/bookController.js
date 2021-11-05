@@ -194,13 +194,64 @@ exports.book_create_post = [
 ];
 
 //ht xoa bieu mau sach tren get
-exports.book_delete_get = function (req, res) {
-  res.send("NOT IMPLEMENT : Book delete GET");
+exports.book_delete_get = function (req, res,next) {
+  // res.send("NOT IMPLEMENT : Book delete GET");
+  async.parallel(
+    {
+      book: function (callback) {
+        Book.findById(req.params.id).exec(callback);
+      },
+      book_bookinstances: function (callback) {
+        BookInstance.find({ book: req.params.id }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.book === null) {
+        res.redirect("/catalog/books");
+      }
+      res.render("book_delete", {
+        title: "Delete Book",
+        book: results.book,
+        book_bookinstances: results.book_bookinstances,
+      });
+    }
+  );
 };
 
 //xu li xoa sach tren post
-exports.book_delete_post = function (req, res) {
-  res.send("NOT IMPLEMENT : Book delete POST");
+exports.book_delete_post = function (req, res,next) {
+  // res.send("NOT IMPLEMENT : Book delete POST");
+  async.parallel(
+    {
+      book: function (callback) {
+        Book.findById(req.body.bookid).exec(callback);
+      },
+      book_bookinstances: function (callback) {
+        BookInstance.find({ book: req.body.bookid }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.book_bookinstances.length > 0) {
+        res.render("book_delete", {
+          title: "Delete Book",
+          book: results.book,
+          book_bookinstances: results.book_bookinstances,
+        });
+        return;
+      }else{
+        Book.findByIdAndRemove(req.body.bookid,function deleteBook(err){
+          if(err) {return next(err);}
+          res.redirect('/catalog/books');
+        })
+      }
+    }
+  );
 };
 
 //xu li cap nhap bieu mau sach tren get
@@ -210,7 +261,7 @@ exports.book_update_get = function (req, res, next) {
   async.parallel(
     {
       book: function (callback) {
-        Book.findById(req.params.id)
+        Book.findById(req.body.bookid)
           .populate("author")
           .populate("genre")
           .exec(callback);
@@ -282,52 +333,63 @@ exports.book_update_post = [
     .escape(),
   body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
   body("genre.*").escape(),
-(req, res, next) => {
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
 
-        // Extract the validation errors from a request.
-        const errors = validationResult(req);
+    // Create a Book object with escaped/trimmed data and old id.
+    var book = new Book({
+      title: req.body.title,
+      author: req.body.author,
+      summary: req.body.summary,
+      isbn: req.body.isbn,
+      genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
+      _id: req.params.id, //This is required, or a new ID will be assigned!
+    });
 
-        // Create a Book object with escaped/trimmed data and old id.
-        var book = new Book(
-          { title: req.body.title,
-            author: req.body.author,
-            summary: req.body.summary,
-            isbn: req.body.isbn,
-            genre: (typeof req.body.genre==='undefined') ? [] : req.body.genre,
-            _id:req.params.id //This is required, or a new ID will be assigned!
-           });
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
 
-        if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/error messages.
+      // Get all authors and genres for form.
+      async.parallel(
+        {
+          authors: function (callback) {
+            Author.find(callback);
+          },
+          genres: function (callback) {
+            Genre.find(callback);
+          },
+        },
+        function (err, results) {
+          if (err) {
+            return next(err);
+          }
 
-            // Get all authors and genres for form.
-            async.parallel({
-                authors: function(callback) {
-                    Author.find(callback);
-                },
-                genres: function(callback) {
-                    Genre.find(callback);
-                },
-            }, function(err, results) {
-                if (err) { return next(err); }
-
-                // Mark our selected genres as checked.
-                for (let i = 0; i < results.genres.length; i++) {
-                    if (book.genre.indexOf(results.genres[i]._id) > -1) {
-                        results.genres[i].checked='true';
-                    }
-                }
-                res.render('book_form', { title: 'Update Book',authors: results.authors, genres: results.genres, book: book, errors: errors.array() });
-            });
-            return;
+          // Mark our selected genres as checked.
+          for (let i = 0; i < results.genres.length; i++) {
+            if (book.genre.indexOf(results.genres[i]._id) > -1) {
+              results.genres[i].checked = "true";
+            }
+          }
+          res.render("book_form", {
+            title: "Update Book",
+            authors: results.authors,
+            genres: results.genres,
+            book: book,
+            errors: errors.array(),
+          });
         }
-        else {
-            // Data from form is valid. Update the record.
-            Book.findByIdAndUpdate(req.params.id, book, {}, function (err,thebook) {
-                if (err) { return next(err); }
-                   // Successful - redirect to book detail page.
-                   res.redirect(thebook.url);
-                });
+      );
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      Book.findByIdAndUpdate(req.params.id, book, {}, function (err, thebook) {
+        if (err) {
+          return next(err);
         }
+        // Successful - redirect to book detail page.
+        res.redirect(thebook.url);
+      });
     }
+  },
 ];
