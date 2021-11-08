@@ -6,6 +6,8 @@ var express = require("express");
 var path = require("path"); //ptich cu phap duong dan tm
 var cookieParser = require("cookie-parser"); //chuyen doi cookie
 var logger = require("morgan"); //ghi log
+var compression = require('compression');//Máy chủ web thường có thể nén phản hồi HTTP được gửi trở lại máy khách, giảm đáng kể thời gian cần thiết để máy khách lấy và tải trang.Đối với một trang web có lưu lượng truy cập cao trong quá trình sản xuất, không sử dụng phần mềm trung gian này. Thay vào đó, sử dụng một proxy ngược nhưNginx
+var helmet = require('helmet');//Nó có thể đặt tiêu đề HTTP thích hợp giúp bảo vệ ứng dụng của bạn khỏi các lỗ hổng web
 
 //require() modul tu tm cac route chua ma xl tap hop cu the cua tuyen duong(duong dan url) co lien quan
 var indexRouter = require("./routes/index");
@@ -14,6 +16,8 @@ var catalogRouter = require("./routes/catalog"); //nhap ca tuyen duowng cho khu 
 
 //tao dt ung dung nhanh
 var app = express();
+
+app.use(helmet());
 
 //------------ ket noi voi csdl mongoDB -------------------
 //Nhập modul mongoose
@@ -38,6 +42,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(compression());//Compress tat ca routes
 app.use(express.static(path.join(__dirname, "public")));
 
 //them code xu li tuyen-route da dc nhap trc do vao chuoi xli yeu cau, xd tyen cu the cho cac phan khac nhau cua web
