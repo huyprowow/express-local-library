@@ -19,3 +19,6 @@ http://localhost:3000/catalog/book/5846437593935e2f8c2aa226
 http://localhost:3000/catalog/book/create
 
 ***ket qua: k gap trang loi 404 => router ok***
+
+**cài heroku:** npm install -g heroku
+**dùng:** heroku.cmd
