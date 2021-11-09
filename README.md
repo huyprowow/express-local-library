@@ -22,3 +22,17 @@ http://localhost:3000/catalog/book/create
 
 **cài heroku:** npm install -g heroku
 **dùng:** heroku.cmd
+
+**tạo, đẩy remote**
+* heroku.cmd create [tên remote (sau là url)]
+* git push heroku main
+
+**đặt biến cấu hình config (env,...)**
+* heroku.cmd config:set NODE_ENV='production' **đặt thành product để cải thiện hiệu suất của và tạo ra các thông báo lỗi ít dài dòng hơn**
+* heroku.cmd config:set MONGODB_URI='url_database' (URI hoac URL gi do thi tuy)
+* heroku.cmd config  **kiểm tra các biến cấu hình (config)**
+
+**gỡ lỗi**
+* heroku.cmd logs    **Hiển thị log hiện tại**
+* heroku.cmd logs --tail  **Hiển thị log hiện tại và tiếp tục cập nhật với bất kỳ kết quả mới nào**
+* heroku.cmd ps   **Hiển thị trạng thái dyno**
