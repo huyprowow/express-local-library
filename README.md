@@ -46,6 +46,9 @@ http://localhost:3000/catalog/book/create
 - git ls-files | git grep node_modules **list ra file node module**
 
   **xoa het may file node module trong git repo**
+
 - echo "node_modules" >> .gitignore
 - git rm -r --cached node_modules
 - git commit -am 'untracked node_modules'
+
+**link heroku:** [ở đây](https://thu-vien-cuc-bo.herokuapp.com/catalog)
